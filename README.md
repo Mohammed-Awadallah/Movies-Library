@@ -13,4 +13,4 @@ choosing the express framework then importing the data from data.json and storin
 finally request and responds to show the data , 
 
 ##  Project Features
-<!-- What are the features included in you app -->
+added local database , added collection and \addMovie and \getMovies functions 
