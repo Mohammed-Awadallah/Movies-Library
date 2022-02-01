@@ -5,10 +5,12 @@ const app = express();
 const jsonData = require("./Movie Data/data.json");
 const dotenv = require('dotenv');
 const axios = require("axios");
+const pg = require("pg");
+
 dotenv.config();
 const PORT = process.env.PORT;
 const APIKEY = process.env.APIKEY;
-app.get('/reviews' , reviews )
+app.get('/collection' , getCollection )
 app.get('/favorite', favorite);
 app.get('/' , movieGetter);
 app.get('/trending', trendHandler);
@@ -57,15 +59,18 @@ function movieSearch(req, res){
 }
 
 function trendHandler(req,res){
-    axios.get(`https://api.themoviedb.org/3/movie/634649?api_key=${APIKEY}`).then(value => {
-       
-            let movieOne = new Movie(value.data.id,value.data.title,value.data.release_date,value.data.poster_path,value.data.overview);            
-         return res.status(200).json(movieOne);
+    let arrayMovie=[];
+    axios.get(`https://api.themoviedb.org/3/trending/all/day?api_key=${APIKEY}`).then(value => {
+        
+            value.data.results.forEach(value=>{
+            let movieOne = new Movie (value.id,value.title,value.release_date,value.poster_path,value.overview);            
+                arrayMovie.push(movieOne)
+            })
+         return res.status(200).json(arrayMovie);
     }).catch(error => {
         errorHandler(error, req,res);
-    
     });
-};
+}
 
 
 function movieGetter(req,res) {
@@ -80,16 +85,17 @@ function favorite(req, res){
     return res.status(200).send("Welcome to favorites");
 };
 
-function reviews(error , req , res){
-    let myArr = [];
-    axios.get(`https://api.themoviedb.org/3/review/5207b24a760ee3630823a626?api_key=${APIKEY}`).then(x => {
-          x.data.results.forEach(element => {
-              myArr.push(element);
-          });
-          return res.status(200).json(myArr);
-    })
 
-}
+function getCollection(req,res){
+    axios.get(`https://api.themoviedb.org/3/collection/97460?api_key=${APIKEY}`).then(value => {
+                
+            let collectionOne = new Movie (value.data.id,value.data.name,value.data.overview,value.data.poster_path,value.data.backdrop_path);            
+         return res.status(200).json(collectionOne);
+    }).catch(error => {
+        errorHandler(error, req,res);
+    
+    });
+};
 
 
 
