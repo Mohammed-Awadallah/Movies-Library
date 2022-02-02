@@ -10,7 +10,7 @@
 
 ##  Getting Started
 choosing the express framework then importing the data from data.json and storing it in a variable , choosing the port through the get.listen method 
-finally request and responds to show the data , 
+finally request and responds to show the data.
 
 ##  Project Features
-added local database , added collection and \addMovie and \getMovies functions 
+added local database , added collection and \addMovie and \getMovies functions  added \DELETE and \UPDATE to update and delete movies based on their id and \getMovie to get a specific movie by id
