@@ -20,6 +20,10 @@ app.get('/trending', trendHandler);
 app.get('/searchmovie',movieSearch);
 app.post("/addMovie" , addMovieHandler);
 app.get("/getMovies" , getMoviesHandler)
+app.put("/UPDATE/:id", updateMovieHandler);
+app.delete("/MOVIE/:id", deleteMovieHandler);
+app.get("/getMovie/:id", getMovieHandler);
+
 app.use(errorHandler);
 
 
@@ -115,6 +119,44 @@ function getMoviesHandler(req , res){
     const sql = `SELECT * FROM anymovie`;
     client.query(sql).then(data => {
         return res.status(200).json(data.rows);
+    })
+}
+
+function updateMovieHandler(req , res){
+    const id = req.params.id;
+    const movie = req.body;
+    const sql = `UPDATE anymovie SET comment=$1 WHERE id=${id} RETURNING *;`
+    const value = [movie.comment];
+   
+    client.query(sql,value).then(data => {
+        
+        return res.status(200).json(data.rows);
+    }).catch(error => {
+        errorHandler(error, req, res);
+    })
+};
+
+function deleteMovieHandler(req,res){
+
+    const id = req.params.id;
+    const sql = `DELETE FROM anymovie WHERE id=${id};`
+
+    client.query(sql).then(() => {
+        return res.status(204).json([]);
+    }).catch(error => {
+        errorHandler(error, req, res);
+    })
+}
+function getMovieHandler(req , res){
+    const id = req.params.id;
+    const sql = `SELECT * FROM anymovie WHERE id=${id}`;
+
+    client.query(sql).then(data => {
+        
+        res.status(200).json(data.rows);
+    }).catch(error => {
+        console.log(error);
+        errorHandler(error, req, res);
     })
 }
 
