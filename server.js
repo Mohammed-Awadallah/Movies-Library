@@ -6,10 +6,14 @@ const jsonData = require("./Movie Data/data.json");
 const dotenv = require('dotenv');
 const axios = require("axios");
 const pg = require("pg");
-const { Client } = require('pg/lib');
+// const { Client } = require('pg/lib');
 dotenv.config();
 const DATABASE_URL = process.env.DATABASE_URL;
-const client = new pg.Client(DATABASE_URL);
+// const client = new pg.Client(DATABASE_URL);
+const client = new pg.Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+});
 app.use(express.json());
 const PORT = process.env.PORT;
 const APIKEY = process.env.APIKEY;
