@@ -1,5 +1,5 @@
 'use strict';
-
+const cors = require('cors')
 const express = require('express');
 const app = express();
 const jsonData = require("./Movie Data/data.json");
@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const axios = require("axios");
 const pg = require("pg");
 // const { Client } = require('pg/lib');
+app.use(cors())
 dotenv.config();
 const DATABASE_URL = process.env.DATABASE_URL;
 // const client = new pg.Client(DATABASE_URL);
